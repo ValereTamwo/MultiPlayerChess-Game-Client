@@ -1,9 +1,40 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import Crown from './assets/Golden-Princess-Crown-PNG-Photos.png'
 import Footer from './ui/Footer'
-import { socket } from './Connection/Socket';;
+import { socket } from './Connection/Socket';
+import { useParams } from "react-router-dom";
 
-function Gamestart() {
+
+
+function Gamestart(props) {
+
+const [Welcome, SetWelcome] = useState('');
+  const [userRedirect, setuserRedirect] = useState(false);
+  const [opponentJoinsGame, SetopponentJoin] = useState(false);
+  const [opponentName, SetopponentName] = useState('');
+
+  
+  const {gameId} = useParams()
+
+  const [Initializor, setInitializor] = useState('');
+
+  const Domaine = 'http://localhost:3000/game/';
+
+
+  
+  socket.emit('join Game Room', { gameId, Initializor });
+  
+  socket.on('Welcome', (data) => {
+    SetWelcome(data.message);
+  })
+ 
+
+
+
+  socket.on('receive_name', (data) => {
+    setInitializor(data.Name);
+  })
+
     return (
       <div>
         <div className='bg-gradient-to-l from-[#261e1a]  to-[#8d5031] w-[100vw] text-red-900 h-[100vh] pt-[20px]  font-poppins '>
@@ -21,8 +52,11 @@ function Gamestart() {
               <p className='text-[#261e1a] text-[19px] relative left-[12vw] top-[10vh] p-[10px]'>
                   Copy the the Link below and Send it to your friend to start the game 👇
               </p>
-              <div className='h-[40px] w-[50vw] bg-[#e5cabc] rounded-[10px] p-[7px] ml-[12vw] mt-[12vh] text-full overflow-scroll'> http://localhost:3000/game/e3er-332e-33df-2d4d3f3f33</div>
-            </div>
+            <div className='h-[40px] w-[50vw] bg-[#e5cabc] rounded-[10px] p-[7px] ml-[12vw] mt-[12vh] text-full overflow-scroll'> { Domaine + gameId }</div>
+            <p className='text-[#f1793c] relative top-[10vh] left-[10vw]'>Initializor Game Session : {Initializor}</p> 
+            <p className='text-[#f1793c] relative top-[10vh] left-[10vw]'>Welcome Game Session : {Welcome}</p> 
+
+          </div>
                 <Footer />
         </div>
             

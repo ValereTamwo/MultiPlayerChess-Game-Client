@@ -1,6 +1,9 @@
 import React ,{useState} from 'react'
 import Crown from '../assets/Golden-Princess-Crown-PNG-Photos.png'
-import {socket,MySocketId} from '../Connection/Socket'
+import { socket, MySocketId } from '../Connection/Socket';
+import {v4 as uuidv4} from 'uuid';
+
+const uuid = uuidv4()
 
 function Join() {
 
@@ -8,7 +11,7 @@ function Join() {
 
   const SendName = () => {
     socket.emit('send Name', opponentName);
-        document.location.href = '/join';
+        document.location.href = `/game/${uuid}`;
     }
     const OnChange = (event) => {
         console.log(event.target.value);
